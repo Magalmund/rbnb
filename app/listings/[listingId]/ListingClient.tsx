@@ -10,7 +10,7 @@ import {differenceInCalendarDays, eachDayOfInterval} from "date-fns";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 
-import {SafeListing, SafeReservations, SafeUser} from "@/app/types";
+import {SafeListing, SafeReservation, SafeUser} from "@/app/types";
 import {categories} from "@/app/components/navbar/Categories";
 import Container from "@/app/components/Container";
 import ListingHead from "@/app/components/listings/ListingHead";
@@ -26,7 +26,7 @@ const initialDateRange = {
 };
 
 interface ListingClientProps {
-    reservations?: SafeReservations[];
+    reservations?: SafeReservation[];
     listing: SafeListing & {
         user: SafeUser
     };
@@ -71,8 +71,7 @@ const ListingClient: React.FC<ListingClientProps> = ({listing, currentUser, rese
             .then(() => {
                 toast.success('Listing reserved!');
                 setDateRange(initialDateRange);
-                //Redirect to /trips
-                router.refresh();
+                router.push('/trips');
             })
             .catch(() => {
                 toast.error('Something went wrong.');
