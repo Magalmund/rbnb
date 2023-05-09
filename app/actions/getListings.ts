@@ -1,4 +1,4 @@
-import prisma from "@/app/libs/prismadb"
+import prisma from "@/app/libs/prismadb";
 
 export interface IListingsParams {
     userId?: string;
@@ -11,7 +11,9 @@ export interface IListingsParams {
     category?: string;
 }
 
-export default async function getListings(params: IListingsParams) {
+export default async function getListings(
+    params: IListingsParams
+) {
     try {
         const {
             userId,
@@ -21,52 +23,53 @@ export default async function getListings(params: IListingsParams) {
             locationValue,
             startDate,
             endDate,
-            category
+            category,
         } = params;
+
         let query: any = {};
 
-        if(userId) {
+        if (userId) {
             query.userId = userId;
         }
 
-        if(category) {
+        if (category) {
             query.category = category;
         }
 
-        if(roomCount) {
+        if (roomCount) {
             query.roomCount = {
                 gte: +roomCount
             }
         }
 
-        if(guestCount) {
+        if (guestCount) {
             query.guestCount = {
                 gte: +guestCount
             }
         }
 
-        if(bathroomCount) {
+        if (bathroomCount) {
             query.bathroomCount = {
                 gte: +bathroomCount
             }
         }
 
-        if(locationValue) {
+        if (locationValue) {
             query.locationValue = locationValue;
         }
 
-        if(startDate && endDate) {
+        if (startDate && endDate) {
             query.NOT = {
                 reservations: {
                     some: {
                         OR: [
                             {
                                 endDate: {gte: startDate},
-                                startDate: {lte: startDate},
+                                startDate: {lte: startDate}
                             },
                             {
                                 startDate: {lte: endDate},
-                                endDate: { gte: endDate},
+                                endDate: {gte: endDate}
                             }
                         ]
                     }
@@ -84,11 +87,10 @@ export default async function getListings(params: IListingsParams) {
         const safeListings = listings.map((listing) => ({
             ...listing,
             createdAt: listing.createdAt.toISOString(),
+        }));
 
-        }))
-
-        return safeListings
+        return safeListings;
     } catch (error: any) {
-        throw new Error(error)
+        throw new Error(error);
     }
 }
